@@ -1,0 +1,31 @@
+name: DevSecOps SCA Gatekeeper
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  sca-scan:
+    name: SCA Vulnerability Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo fuente
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Instalar dependencias vulnerables
+        run: |
+          cd app-sca
+          npm install
+
+      - name: Ejecutar analisis SCA (Falla ante High/Critical)
+        run: |
+          cd app-sca
+          npm audit --audit-level=high

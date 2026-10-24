@@ -1,0 +1,14 @@
+{
+  "name": "student-community-day-sca-lab",
+  "version": "1.0.0",
+  "description": "App intencionalmente vulnerable para evaluacion SCA",
+  "main": "index.js",
+  "scripts": {
+    "audit:high": "npm audit --audit-level=high"
+  },
+  "dependencies": {
+    "axios": "0.21.1",
+    "lodash": "4.17.15",
+    "minimist": "1.2.0"
+  }
+}

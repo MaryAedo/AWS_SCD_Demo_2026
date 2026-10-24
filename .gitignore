@@ -1,0 +1,14 @@
+# Terraform local state & cache
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+.terraform.lock.hcl
+
+# Node / dependencias
+**/node_modules/
+package-lock.json
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

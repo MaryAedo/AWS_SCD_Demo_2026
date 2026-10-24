@@ -1,0 +1,64 @@
+# Módulo CSPM: Detección de Postura en AWS Security Hub
+
+Este módulo simula la infraestructura de almacenamiento y red de CloudStore,
+configurada con malas prácticas comunes para evaluar controles de **Cloud
+Security Posture Management**.
+
+## Archivos
+
+- `main.tf`: declaración deliberadamente insegura del bucket S3 y el Security
+  Group.
+- `../cspm-remediated/main.tf`: ubicación sugerida para el código corregido
+  con controles compensatorios y cifrado obligatorio.
+
+## Vulnerabilidades Esperadas
+
+### 1. `[S3.1]` S3 Block Public Access setting should be enabled
+
+- **Servicio:** Amazon S3 / AWS Security Hub (FSBP y CIS Benchmark).
+- **Severidad:** Critical / High.
+- **Significado:** el bucket carece de bloqueos a nivel de cuenta o bucket para
+  ACL y políticas públicas.
+
+Remediación:
+
+```hcl
+resource "aws_s3_bucket_public_access_block" "secure_block" {
+  bucket                  = aws_s3_bucket.insecure_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+```
+
+### 2. `[S3.4]` S3 buckets should have server-side encryption enabled
+
+- **Servicio:** Amazon S3 / AWS Security Hub.
+- **Severidad:** Medium / High.
+- **Significado:** los objetos no tienen cifrado en reposo configurado por
+  defecto, lo que puede incumplir PCI-DSS e ISO 27001.
+
+Remediación:
+
+```hcl
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
+  bucket = aws_s3_bucket.insecure_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+```
+
+### 3. `[EC2.8]` EC2 security groups should not allow ingress from `0.0.0.0/0` to port 22
+
+- **Servicio:** Amazon EC2 / AWS Security Hub.
+- **Severidad:** High.
+- **Significado:** el puerto SSH queda expuesto a ataques de fuerza bruta y
+  escaneos automatizados.
+
+Remediación: restringir el origen a una VPN o bastión interno, o reemplazar
+SSH por AWS Systems Manager Session Manager.
