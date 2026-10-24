@@ -156,7 +156,7 @@ incluidas dependencias directas y transitivas. Facilita conocer el alcance de
 un CVE y acelerar la respuesta ante vulnerabilidades de la cadena de
 suministro.
 
-### CVE EoL y riesgo de soporte
+### Riesgo de soporte y obsolescencia (EoL)
 Una alerta de software **EoL** indica que el fabricante dejó de ofrecer
 soporte de seguridad para esa versión. Aunque no implique una explotación
 activa por sí sola, aumenta el riesgo porque las vulnerabilidades futuras no
