@@ -268,6 +268,39 @@ Security Hub puede tardar entre 5 y 20 minutos en evaluar las reglas.
 
 #### NVM
 
+##### Opción recomendada: construir y publicar con GitHub Actions
+
+Para evitar depender de Docker Desktop en la máquina local, el workflow
+`.github/workflows/nvm-ecr.yml` construye la imagen en un runner Linux de
+GitHub Actions y la publica en Amazon ECR. El workflow se ejecuta bajo demanda
+con `workflow_dispatch`.
+
+Antes de ejecutarlo:
+
+1. En el repositorio de GitHub, ve a **Settings** > **Secrets and variables** >
+   **Actions**.
+2. Crea estos secretos con las credenciales del usuario IAM delegado:
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+3. No guardes las claves directamente en el workflow ni en el repositorio.
+4. Sube el workflow a la rama `main`:
+
+   ```bash
+   git add .github/workflows/nvm-ecr.yml README.md
+   git commit -m "ci: add ECR workflow"
+   git push origin main
+   ```
+
+5. En GitHub, abre la pestaña **Actions**, selecciona **Build and Push NVM
+   Workload to ECR** y haz clic en **Run workflow**.
+
+El workflow crea el repositorio `cloudstore-backend` si todavía no existe,
+construye el contenedor de .NET 6 EoL y publica la etiqueta `latest` en ECR en
+la región `us-east-1`. Amazon Inspector analizará la imagen automáticamente
+después de la publicación.
+
+##### Opción alternativa: construcción local
+
 ```bash
 cd ../../nvm-workload
 aws ecr create-repository --repository-name cloudstore-backend --region us-east-1
