@@ -1,16 +1,17 @@
-# NVM Issue 1: Imagen base antigua con .NET 6 oficial (EoL desde fines de 2024)
+# NVM Issue 1: Runtime obsoleto sin soporte de seguridad (End-of-Life / EoL)
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim
 
-# NVM Issue 2: Paquetes del SO con CVEs sin parchar (OpenSSL antiguo)
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends openssh-server curl && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# NVM Issue 3: Debilidad de configuración en el servicio SSH del host
-RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
+# NVM Issue 3: Hardening deficiente - Simulación de configuración insegura
+RUN mkdir -p /etc/ssh && \
+    echo "PermitRootLogin yes" >> /etc/ssh/sshd_config && \
     echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 
-WORKDIR /app
-COPY app/ .
+# Simulación de binario de la aplicación
+RUN echo 'Console.WriteLine("CloudStore API - Vulnerable .NET 6 Runtime");' > /app/app.dll
 
-CMD ["dotnet", "--info"]
+USER root
+EXPOSE 80 22
+
+ENTRYPOINT ["dotnet", "app.dll"]
