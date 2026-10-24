@@ -70,6 +70,41 @@ vulnerabilidades conocidas (CVE) de los proveedores del sistema operativo y
 puede enviar los hallazgos a Security Hub sin requerir agentes dentro del
 contenedor.
 
+### 6. ¿Es posible crear reglas personalizadas (*Custom Controls*) en AWS Security Hub como en plataformas CNAPP (por ejemplo, Wiz)?
+
+**Sí.** En entornos productivos y corporativos existen dos caminos
+principales:
+
+1. **Reglas personalizadas nativas en AWS:**
+   - Se crean **AWS Config Custom Rules**, cuya lógica de validación se
+     programa mediante funciones **AWS Lambda** (Python o Node.js). Para
+     controles declarativos también puede utilizarse **CloudFormation Guard**.
+   - Cuando se detecta un incumplimiento, AWS Config genera el resultado de
+     cumplimiento. Si se necesita convertirlo en un hallazgo de seguridad,
+     una función o integración puede formatearlo con el estándar **ASFF
+     (AWS Security Finding Format)** e importarlo en AWS Security Hub mediante
+     la API `BatchImportFindings`.
+   - Este enfoque permite evaluar requisitos propios, como convenciones de
+     etiquetado, cifrado obligatorio o restricciones específicas de red, sin
+     depender de un proveedor externo.
+
+2. **Integración con plataformas CNAPP de terceros (Wiz, Prisma Cloud u Orca):**
+   - Estas plataformas multicloud analizan grafos de recursos, identidades y
+     riesgos correlacionados mediante roles IAM delegados y permisos de
+     lectura.
+   - Sus conectores pueden transmitir los hallazgos hacia **AWS Security
+     Hub**, normalmente mediante integraciones nativas y el formato ASFF.
+     Security Hub actúa como punto central de agregación, priorización y
+     automatización, mientras que la lógica de análisis y correlación
+     permanece en la plataforma CNAPP.
+
+La diferencia principal es el alcance: AWS Config y Lambda ofrecen controles
+personalizados sobre recursos de AWS con componentes administrados por el
+equipo, mientras que un CNAPP añade visibilidad multicloud y correlación de
+riesgos a cambio de una integración y un servicio adicional. Para este
+laboratorio, las reglas nativas son suficientes y mantienen la arquitectura
+centrada en AWS.
+
 ---
 
 ## 📚 Documentación Oficial de AWS
@@ -78,6 +113,8 @@ contenedor.
 - [Controles AWS Foundational Security Best Practices](https://docs.aws.amazon.com/securityhub/latest/userguide/fsbp-standard.html)
 - [Escaneo de imágenes ECR con Amazon Inspector](https://docs.aws.amazon.com/inspector/latest/user/scanning-ecr.html)
 - [Conceptos fundamentales de AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html)
+- [Reglas personalizadas de AWS Config](https://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_develop-rules.html)
+- [Importación de hallazgos mediante BatchImportFindings](https://docs.aws.amazon.com/securityhub/1.0/APIReference/API_BatchImportFindings.html)
 - [Detección de amenazas con Amazon GuardDuty](https://docs.aws.amazon.com/guardduty/latest/ug/what-is-guardduty.html)
 
 ## 🎓 Recursos Recomendados
