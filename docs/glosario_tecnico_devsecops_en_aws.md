@@ -128,6 +128,12 @@ larga duración en los secretos del repositorio.
 servicios, recursos, hallazgos y configuraciones pueden depender de la región;
 por eso este laboratorio utiliza explícitamente `us-east-1`.
 
+### AWS Budget
+Recurso de control de costos que establece un límite para un periodo y envía
+notificaciones cuando el gasto real o previsto supera umbrales definidos. En
+este laboratorio, Terraform configura un presupuesto mensual de `5 USD` con
+alertas al `80%` de consumo real y al `100%` de consumo previsto.
+
 ### ECR repository e image tag
 Un **repository** de ECR agrupa imágenes relacionadas. Una **tag**, como
 `latest`, identifica una versión lógica de una imagen. Para trazabilidad en

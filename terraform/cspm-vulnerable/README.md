@@ -4,10 +4,44 @@ Este módulo simula la infraestructura de almacenamiento y red de CloudStore,
 configurada con malas prácticas comunes para evaluar controles de **Cloud
 Security Posture Management**.
 
+## Presupuesto mensual
+
+El archivo `budget.tf` crea un presupuesto mensual de `5 USD` con dos
+notificaciones:
+
+- consumo real superior al `80%`;
+- previsión de superar el `100%`.
+
+El correo de notificación se recibe mediante la variable sensible
+`budget_alert_email`; no se guarda una dirección personal en el repositorio.
+Desde PowerShell, ejecuta:
+
+```powershell
+cd C:\Demo_AWS_SCD2026\terraform\cspm-vulnerable
+terraform plan -var="budget_alert_email=TU_CORREO"
+terraform apply -var="budget_alert_email=TU_CORREO"
+```
+
+Si prefieres no exponer el correo en el historial de comandos, usa un archivo
+local `terraform.tfvars` (no lo subas al repositorio):
+
+```hcl
+budget_alert_email = "tu-correo@example.com"
+```
+
+Después ejecuta:
+
+```powershell
+terraform plan
+terraform apply -auto-approve
+```
+
 ## Archivos
 
 - `main.tf`: declaración deliberadamente insegura del bucket S3 y el Security
   Group.
+- `budget.tf`: presupuesto mensual y alertas de costo.
+- `variables.tf`: variable sensible para el correo de alertas.
 - `../cspm-remediated/main.tf`: ubicación sugerida para el código corregido
   con controles compensatorios y cifrado obligatorio.
 
