@@ -34,6 +34,19 @@ en lugar de configuraciones manuales en la consola. Terraform es la
 herramienta IaC utilizada para declarar el bucket S3 y el Security Group del
 escenario CSPM.
 
+### Tags o etiquetas de recursos
+Metadatos clave-valor asociados a recursos de AWS para identificar su
+propósito, propietario, entorno y centro de costos. En este laboratorio se
+usan `Environment`, `Project`, `Owner`, `CostCenter` y `AutoCleanup` para
+facilitar inventario, seguimiento de costos y limpieza de recursos.
+
+### Terraform `default_tags`
+Configuración del proveedor de AWS que aplica automáticamente un conjunto
+común de tags a los recursos administrados por Terraform. Evita repetir el
+mismo bloque `tags` en cada recurso y mantiene una convención uniforme. Los
+tags específicos declarados dentro de un recurso se conservan y pueden
+complementar o sobrescribir los valores predeterminados según el proveedor.
+
 ### Artefacto
 Resultado versionado y distribuible de un proceso de construcción, como un
 paquete npm, una imagen de contenedor o un archivo compilado. La seguridad

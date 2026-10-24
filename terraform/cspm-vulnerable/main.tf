@@ -11,6 +11,16 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Environment = "SCDay-Demo"
+      Project     = "Student-Community-Day-2026"
+      Owner       = "Mary-Aedo"
+      CostCenter  = "Academic-Presentation"
+      AutoCleanup = "True"
+    }
+  }
 }
 
 # ------------------------------------------------------------------
